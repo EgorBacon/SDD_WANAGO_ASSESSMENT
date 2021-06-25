@@ -7,13 +7,9 @@ public class EnemyBehaviour : MonoBehaviour
     public float LookRadius = 20f;
     public float MoveSpeed = 2f;
     public Transform spawnPoint;
-    Transform target;
+    public Transform target;
 
 
-    private void Start()
-    {
-        target = PlayerManager.instance.player.transform;
-    }
 
     private void Update()
     {
@@ -29,19 +25,12 @@ public class EnemyBehaviour : MonoBehaviour
         transform.position += transform.forward * MoveSpeed * Time.deltaTime;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnTriggerEnter(Collider other)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, LookRadius);
-
+        Debug.Log("touch");
+        if (other.gameObject.tag == "Lazer")
+        {
+            transform.position = spawnPoint.position;
+        }
     }
-
-    private void OnCollisionEnter (Collider coll)
-    {
-        Debug.Log("hit somin " + coll.name);
-        if(coll.tag == "Lazer") {
-            gameObject.transform.position = spawnPoint.transform.position;
-        }           
-    }
-
 }

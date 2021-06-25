@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject lazerObj;
 
     private bool movementPaused = false;
+    private bool canvasEnabled = false;
     private Vector3 movementVector;
     private Rigidbody rb;
     private GameObject mainCamera;
@@ -41,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forwardVector = transform.forward * Input.GetAxis("Vertical");
         Vector3 sideVector = transform.right * Input.GetAxis("Horizontal");
         movementVector = new Vector3((forwardVector.x + sideVector.x) * moveSpeed, rb.velocity.y, (forwardVector.z + sideVector.z) * moveSpeed);
+
+
 	}
 
     private void FixedUpdate() {
@@ -57,11 +60,13 @@ public class PlayerMovement : MonoBehaviour
 		}
 
         if (Input.GetKeyDown(KeyCode.E)) {
-            if (other.transform.tag == "Keypad" && !movementPaused) {
+            if (other.transform.tag == "Keypad" && !canvasEnabled) {
                 GameObject.Find("KeypadManager").GetComponent<KeypadManager>().turnOnCanvas();
+                canvasEnabled = true;
 				DeactivatePlayer();
-            } else if (other.transform.tag == "Keypad" && movementPaused) {
+            } else if (other.transform.tag == "Keypad" && canvasEnabled) {
                 GameObject.Find("KeypadManager").GetComponent<KeypadManager>().turnOffCanvas();
+                canvasEnabled = false;
 				ActivatePlayer();
             }
         }
